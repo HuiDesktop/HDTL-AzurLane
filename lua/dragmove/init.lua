@@ -11,6 +11,7 @@ _M.create = function(p)
     M.event_prefix = ev.unique()
     M.dragging = M.event_prefix .. "dragging"
     M.dragged = M.event_prefix .. "dragged"
+    M.dropped = M.event_prefix .. "dropped"
     M.clicked = M.event_prefix .. "clicked"
     M.drop = false
     M.ground = 0
@@ -70,6 +71,7 @@ _M.create = function(p)
                         v = v * 0.5
                     else
                         M.drop = false
+                        ev.trigger(M.dropped)
                     end
                 end
             end
