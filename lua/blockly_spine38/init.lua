@@ -55,6 +55,10 @@ _M.create = function (p, modelConfig)
 
     if modelConfig.x == nil or modelConfig.y == nil or modelConfig.w == nil or modelConfig.h == nil then
         local r = calcWindowSize(ffi, sp, animationState, animationStateData, skeleton)
+        if r.x * 2 < r.width then
+            r.x = r.width - r.x
+            r.width = r.x * 2
+        end
         modelConfig.x = r.x
         modelConfig.y = r.y
         modelConfig.w = r.width
