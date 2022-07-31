@@ -72,6 +72,7 @@ _M.create = function(p)
                     else
                         M.drop = false
                         ev.trigger(M.dropped)
+                        return
                     end
                 end
             end
