@@ -31,6 +31,8 @@ M.create = function(param)
     rl.InitWindow(400, 300, "HuiDesktop Light Renderer")
     win32.directSetExStyle(0x80180)
 
+    if not param.culling then rl.rlDisableBackfaceCulling() end -- Normally we do not use backface culling
+
     if param.settings.x ~= nil and param.settings.y ~= nil then
         rl.SetWindowPosition(param.settings.x, param.settings.y)
     else
