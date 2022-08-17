@@ -18,7 +18,7 @@ M.register = function(path)
     end
     local audio = {
         path = path,
-        audio = rl.LoadMusicStream(path)
+        audio = rl.LoadSound(path)
     }
     setmetatable(audio, {
         __index = {
@@ -27,36 +27,33 @@ M.register = function(path)
                     if M.playing ~= nil then M.playing:stop() end
                     M.playing = self
                 end
-                rl.PlayMusicStream(self.audio)
+                rl.PlaySound(self.audio)
             end,
             stop = function(self)
-                rl.StopMusicStream(self.audio)
+                rl.StopSound(self.audio)
             end,
             loop = function (self, is)
-                self.audio.looping = is
+                self.looping = is
             end,
             isplaying = function (self)
-                return rl.IsMusicStreamPlaying(self.audio)
+                return rl.IsSoundPlaying(self.audio)
             end
         }
     })
     audios[#audios+1] = audio
-    rl.SetMusicVolume(audio.audio, volume)
     return audio
 end
 
+local deprecated = false
+
 M.update = function()
-    for i = 1, #audios do
-        rl.UpdateMusicStream(audios[i].audio)
-    end
+    if not deprecated then log("[WARN] blockly_audio.update is deprecated and will be removed soon") end
 end
 
 M.volume = function (s_volume)
     if s_volume == nil then return math.ceil(volume * 100) end
     volume = s_volume / 100
-    for i = 1, #audios do
-        rl.SetMusicVolume(audios[i].audio, volume)
-    end
+    rl.SetMasterVolume(volume)
 end
 
 return M
