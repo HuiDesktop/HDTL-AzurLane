@@ -11,11 +11,15 @@ M.playing = nil
 
 M.single = false
 
-M.register = function(path)
+local function ensureInit()
     if not init then
         init = true
         rl.InitAudioDevice()
     end
+end
+
+M.register = function(path)
+    ensureInit()
     local audio = {
         path = path,
         audio = rl.LoadSound(path)
@@ -51,6 +55,7 @@ M.update = function()
 end
 
 M.volume = function (s_volume)
+    ensureInit()
     if s_volume == nil then return math.ceil(volume * 100) end
     volume = s_volume / 100
     rl.SetMasterVolume(volume)
