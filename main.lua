@@ -174,7 +174,7 @@ ipc.addPanelItem(
         function() return settings.walk end)
     ipc.addPanelItem(
         { type = "single", valueType = "number", prompt = "最远距离：", hint = "水平超过这个距离，桌宠就会走向鼠标，若不想频繁跟随就调大一些" },
-        function(v) settings.startDistance = v walker.startDistance = v settings:save() end,
+        function(v) v = math.max(v, settings.stopDistance) settings.startDistance = v walker.startDistance = v settings:save() end,
         function() return settings.startDistance end)
     ipc.addPanelItem(
         { type = "single", valueType = "number", prompt = "停止距离：", hint = "水平小于这个距离，桌宠就会停止走动，调大一点可以避免走得太近" },
