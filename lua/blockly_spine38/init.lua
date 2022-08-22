@@ -57,8 +57,8 @@ _M.create = function (p, modelConfig)
         local r = calcWindowSize(ffi, sp, animationState, animationStateData, skeleton)
         if r.x * 2 < r.width then
             r.x = r.width - r.x
-            r.width = r.x * 2
         end
+        r.width = r.x * 2
         modelConfig.x = r.x
         modelConfig.y = r.y
         modelConfig.w = r.width
