@@ -32,7 +32,7 @@ end
 
 -- 加载设置
 local settings = settingsMan.load("settings.json", true)
-settings:default({ walk = true, drag = true, volume = 50, idleAudioProb = 60 ,startDistance = 500, stopDistance = 200, scale = 50, drop = true, transparency = 255, autoHide = true, idleMotion = 1, launchAudio = false })
+settings:default({ walk = true, drag = true, volume = 50, idleAudioProb = 60 ,startDistance = 500, stopDistance = 200, scale = 50, drop = true, transparency = 255, autoHide = true, idleMotion = 1, launchAudio = false, hittest = true })
 settings:save()
 
 local def = settingsMan.load("assets/audio.conf.json", false)
@@ -58,7 +58,8 @@ ipc.addPanelItem(
     function() return settings.transparency end)
 
 -- 加载模型
-local model = blockly_spine.createFromDefaultConfigFile { hittest = true, pma = false }
+local modelRuntimeParameters = { hittest = true, pma = false }
+local model = blockly_spine.createFromDefaultConfigFile(modelRuntimeParameters)
 setPropertyValues(model, {
     scale = settings.scale / 100,
     defaultMix = 0.2,
@@ -68,6 +69,10 @@ ipc.addPanelItem(
     { type = "single", valueType = "number", prompt = "缩放（百分制）：", hint = "100为一倍缩放", min = 0, max = 114514 },
     function(v) settings.scale = v model.keepSetScale(v / 100) model.setWindowSize() settings:save() end,
     function() return settings.scale end)
+ipc.addPanelItem(
+    { type = "bool", prompt = "响应点击", hint = "关闭的话小人无法点击，即可以点击到小人下方的窗口" },
+    function(v) modelRuntimeParameters.hittest = v settings.hittest = v settings:save() end,
+    function() return settings.hittest end)
 
 -- 加载音频
 audio.volume(settings.volume)
