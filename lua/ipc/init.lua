@@ -128,6 +128,46 @@ M.getV = function(param)
                 M.wrote(inst, wrote)
             end
         end
+    elseif param.type == 'starttab' then return
+        function(r)
+            return function(inst)
+                log('Impossible @ ipc/init.lua')
+            end
+        end,
+        function (r)
+            return function(inst, wrote)
+                ipc.hiMQ_begin(inst)
+                M.writeInt32(inst, 5) -- readonly text
+                M.wrote(inst, wrote)
+            end
+        end
+    elseif param.type == 'addpage' then return
+        function(r)
+            return function(inst)
+                log('Impossible @ ipc/init.lua')
+            end
+        end,
+        function (r)
+            return function(inst, wrote)
+                ipc.hiMQ_begin(inst)
+                M.writeInt32(inst, 6) -- readonly text
+                M.writeString(inst, param.text) -- text
+                M.wrote(inst, wrote)
+            end
+        end
+    elseif param.type == 'endtab' then return
+        function(r)
+            return function(inst)
+                log('Impossible @ ipc/init.lua')
+            end
+        end,
+        function (r)
+            return function(inst, wrote)
+                ipc.hiMQ_begin(inst)
+                M.writeInt32(inst, 7) -- readonly text
+                M.wrote(inst, wrote)
+            end
+        end
     end
 end
 
