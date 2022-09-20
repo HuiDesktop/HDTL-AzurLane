@@ -37,6 +37,9 @@ settings:save()
 
 local def = settingsMan.load("assets/audio.conf.json", false)
 
+ipc.addPanelItem({type="starttab"}, function() end, function() end)
+ipc.addPanelItem({type="addpage", text="窗口"}, function() end, function() end)
+
 -- 新建窗口
 window.create { vsync = true, topmost = true, transparent = true, autoHide = true, settings = settings:access("window") }
 win32.setTransparency(settings.transparency)
@@ -100,6 +103,7 @@ local interact_audios = (function()
     return function() vs[math.random(#vs)]:play() end
 end)()
 
+ipc.addPanelItem({type="addpage", text="语音"}, function() end, function() end)
 ipc.addPanelItem(
     { type = "single", valueType = "number", prompt = "音量大小：", hint = "0 ~ 100", min = 0, max = 100 },
     function(v) settings.volume = v audio.volume(v) settings:save() end,
@@ -147,6 +151,7 @@ ev.on(model.spine_complete, function()
     end
 end)
 
+ipc.addPanelItem({type="addpage", text="互动"}, function() end, function() end)
 ipc.addPanelItem(
     { type = "button", prompt = "切换尬舞、站、坐、躺", hint = "坐和躺请在下面设置一下地面坐标以免看着奇怪" },
     function()
@@ -251,6 +256,7 @@ end)();
     ev.on(model.spine_complete, function() if state == "interact" then enterState("idle") end end)
 end)();
 
+ipc.addPanelItem({type="addpage", text="重置"}, function() end, function() end)
 ipc.addPanelItem(
         { type = "button", prompt = "重置小人坐标", hint = "如屏幕里面找不到小人，请最小化所有窗口然后点击此按钮" },
         function()
@@ -260,6 +266,7 @@ ipc.addPanelItem(
         end,
         function() end)
 
+ipc.addPanelItem({type="addpage", text="启动"}, function() end, function() end)
 -- 启动语音
 if #def.launch == 0 then
     ipc.addPanelItem({ type = "readonly", text = "本配置没有语音……" }, function() end, function() end)
@@ -274,6 +281,8 @@ else
         function(v) settings.launchAudio = v settings:save() end,
         function() return settings.launchAudio end)
 end
+
+ipc.addPanelItem({type="endtab"}, function() end, function() end)
 
 -- ipc
 if #arg > 1 then
