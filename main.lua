@@ -78,6 +78,7 @@ ipc.addPanelItem(
 audio.volume(settings.volume)
 audio.single = true
 local idle_audios_eve = (function()
+    if #def.idle == 0 then return function() end end
     local vs = {}
     local lastPlaying = nil
 
@@ -93,6 +94,7 @@ local idle_audios_eve = (function()
     end
 end)()
 local interact_audios = (function()
+    if #def.interact == 0 then return function() end end
     local vs = {}
     for i, v in ipairs(def.interact) do vs[i] = audio.register(v) vs[i]:loop(false) end
     return function() vs[math.random(#vs)]:play() end
@@ -259,15 +261,19 @@ ipc.addPanelItem(
         function() end)
 
 -- 启动语音
-if settings.launchAudio then
-    local au = audio.register(def.launch[math.random(#def.launch)])
-    au:loop(false)
-    au:play()
+if #def.launch == 0 then
+    ipc.addPanelItem({ type = "readonly", text = "本配置没有语音……" }, function() end, function() end)
+else
+    if settings.launchAudio then
+        local au = audio.register(def.launch[math.random(#def.launch)])
+        au:loop(false)
+        au:play()
+    end
+    ipc.addPanelItem(
+        { type = "bool", prompt = "启动时播放问候语音", hint = "默认关闭，以防社死" },
+        function(v) settings.launchAudio = v settings:save() end,
+        function() return settings.launchAudio end)
 end
-ipc.addPanelItem(
-    { type = "bool", prompt = "启动时播放问候语音", hint = "默认关闭，以防社死" },
-    function(v) settings.launchAudio = v settings:save() end,
-    function() return settings.launchAudio end)
 
 -- ipc
 if #arg > 1 then
