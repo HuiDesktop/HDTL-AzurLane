@@ -25,15 +25,16 @@ sp.spBone_setYDown(true)
 
 local _M = {}
 
-_M.create = function (p, modelConfig)
+_M.create = function (p, modelConfig, root)
+    if root then root = root .. '/app/' else root = '' end
     local M = {}
-    local atlas = sp.spAtlas_createFromFile(modelConfig.atlas, ffi.NULL)
+    local atlas = sp.spAtlas_createFromFile(root .. modelConfig.atlas, ffi.NULL)
     local skeletonData = nil
     local scale = 1
     
     if modelConfig.type == 'json' then
         local skelFile = sp.spSkeletonJson_create(atlas)
-        skeletonData = sp.spSkeletonJson_readSkeletonDataFile(skelFile, modelConfig.skeleton)
+        skeletonData = sp.spSkeletonJson_readSkeletonDataFile(skelFile, root .. modelConfig.skeleton)
         if skeletonData == ffi.NULL then
             log(skelFile.error)
             sp.spSkeletonJson_dispose(skelFile)
@@ -41,7 +42,7 @@ _M.create = function (p, modelConfig)
         end
     else
         local skelFile = sp.spSkeletonBinary_create(atlas)
-        skeletonData = sp.spSkeletonBinary_readSkeletonDataFile(skelFile, modelConfig.skeleton)
+        skeletonData = sp.spSkeletonBinary_readSkeletonDataFile(skelFile, root .. modelConfig.skeleton)
         if skeletonData == ffi.NULL then
             log(skelFile.error)
             sp.spSkeletonBinary_dispose(skelFile)
@@ -219,6 +220,15 @@ end
 ---@param p any
 _M.createFromDefaultConfigFile = function(p)
     return _M.createFromConfigFile(p, "assets/model.conf.json")
+end
+
+_M.createFromPathDefaultConfigFile = function(p, path)
+    local M = {}
+    M.event_prefix = ev.unique()
+    M.mousein = M.event_prefix .. 'mouse.in'
+    M.mouseout = M.event_prefix .. 'mouse.out'
+    local modelConfig = require("settings").load(path .. "/app/assets/model.conf.json", false)
+    return _M.create(p, modelConfig, path)
 end
 
 return _M;
