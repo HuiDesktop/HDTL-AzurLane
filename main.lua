@@ -10,7 +10,7 @@ local ipc = require("ipc")
 local win32 = require("win32")
 local args = require("args")
 
-local modelNameFile = io.open("assets/name.txt", "r")
+local modelNameFile = io.open(args.args['model'] .. "/app/assets/name.txt", "r")
 if modelNameFile == nil then log("failed to load model name") os.exit(1, true) return end
 local modelName = modelNameFile:read("l")
 modelNameFile:close()
