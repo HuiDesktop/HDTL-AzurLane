@@ -25,11 +25,14 @@ M.create = function(param)
     rl.SetConfigFlags(rl.FLAG_WINDOW_UNDECORATED)
     rl.SetConfigFlags(rl.FLAG_WINDOW_ALWAYS_RUN)
     rl.SetConfigFlags(rl.FLAG_WINDOW_RESIZABLE)
+    rl.SetConfigFlags(rl.FLAG_WINDOW_HIDDEN)
     if param.vsync then rl.SetConfigFlags(rl.FLAG_VSYNC_HINT) end
     if param.transparent then rl.SetConfigFlags(rl.FLAG_WINDOW_TRANSPARENT) end
     if param.topmost then rl.SetConfigFlags(rl.FLAG_WINDOW_TOPMOST) end
     rl.InitWindow(400, 300, "HuiDesktop Light Renderer")
-    win32.directSetExStyle(0x80180)
+    win32.enableExStyle(0x00000080) -- WS_EX_TOOLWINDOW
+    win32.disableExStyle(0x00040000) -- WS_EX_APPWINDOW
+    rl.ClearWindowState(rl.FLAG_WINDOW_HIDDEN)
 
     if not param.culling then rl.rlDisableBackfaceCulling() end -- Normally we do not use backface culling
 
