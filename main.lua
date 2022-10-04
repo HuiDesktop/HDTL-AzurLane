@@ -10,7 +10,7 @@ local ipc = require("ipc")
 local win32 = require("win32")
 local args = require("args")
 
-local modelNameFile = io.open(args.args['model'] .. "/app/assets/name.txt", "r")
+local modelNameFile = io.open(args.args['model'] .. "assets/name.txt", "r")
 if modelNameFile == nil then log("failed to load model name") os.exit(1, true) return end
 local modelName = modelNameFile:read("l")
 modelNameFile:close()
@@ -36,7 +36,7 @@ local settings = settingsMan.load(args.args['config'] .. "/settings.json", true)
 settings:default({ walk = true, drag = true, volume = 50, idleAudioProb = 60 ,startDistance = 500, stopDistance = 200, scale = 50, drop = true, transparency = 255, autoHide = true, idleMotion = 1, launchAudio = false, hittest = true })
 settings:save()
 
-local def = settingsMan.load(args.args['audio'] .. "/app/assets/audio.conf.json", false)
+local def = settingsMan.load(args.args['audio'] .. "assets/audio.conf.json", false)
 
 ipc.addPanelItem({type="starttab"}, function() end, function() end)
 ipc.addPanelItem({type="addpage", text="窗口"}, function() end, function() end)
@@ -86,7 +86,7 @@ local idle_audios_eve = (function()
     local vs = {}
     local lastPlaying = nil
 
-    for i, v in ipairs(def.idle) do vs[i] = audio.register(args.args['audio'] .. '/app/' .. v) vs[i]:loop(false) end
+    for i, v in ipairs(def.idle) do vs[i] = audio.register(args.args['audio'] .. v) vs[i]:loop(false) end
 
     return function()
         if state ~= "idle" then return end
@@ -100,7 +100,7 @@ end)()
 local interact_audios = (function()
     if #def.interact == 0 then return function() end end
     local vs = {}
-    for i, v in ipairs(def.interact) do vs[i] = audio.register(args.args['audio'] .. '/app/' .. v) vs[i]:loop(false) end
+    for i, v in ipairs(def.interact) do vs[i] = audio.register(args.args['audio'] .. v) vs[i]:loop(false) end
     return function() vs[math.random(#vs)]:play() end
 end)()
 
@@ -272,8 +272,8 @@ ipc.addPanelItem({type="addpage", text="启动"}, function() end, function() end
 if #def.launch == 0 then
     ipc.addPanelItem({ type = "readonly", text = "本配置没有语音……" }, function() end, function() end)
 else
-    if settings.launchAudio then
-        local au = audio.register(args.args['audio'] .. '/app/' .. def.launch[math.random(#def.launch)])
+    if settings.launchAudio and #def.launch > 0 then
+        local au = audio.register(args.args['audio'] .. def.launch[math.random(#def.launch)])
         au:loop(false)
         au:play()
     end
