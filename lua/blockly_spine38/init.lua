@@ -26,7 +26,8 @@ sp.spBone_setYDown(true)
 local _M = {}
 
 _M.create = function (p, modelConfig, root)
-    if root then root = root .. '/app/' else root = '' end
+    root = root or './'
+    
     local M = {}
     local atlas = sp.spAtlas_createFromFile(root .. modelConfig.atlas, ffi.NULL)
     local skeletonData = nil
@@ -227,7 +228,7 @@ _M.createFromPathDefaultConfigFile = function(p, path)
     M.event_prefix = ev.unique()
     M.mousein = M.event_prefix .. 'mouse.in'
     M.mouseout = M.event_prefix .. 'mouse.out'
-    local modelConfig = require("settings").load(path .. "/app/assets/model.conf.json", false)
+    local modelConfig = require("settings").load(path .. "assets/model.conf.json", false)
     return _M.create(p, modelConfig, path)
 end
 

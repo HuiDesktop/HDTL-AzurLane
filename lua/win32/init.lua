@@ -40,6 +40,18 @@ M.directSetExStyle = function(exStyle)
     return C.SetWindowLongW(ffi.cast(handleType, raylib.GetWindowHandle()), -20, exStyle)
 end
 
+M.enableExStyle = function(s)
+    local exStyle = M.directGetExStyle()
+    exStyle = bit.bor(exStyle, s)
+    M.directSetExStyle(exStyle)
+end
+
+M.disableExStyle = function(s)
+    local exStyle = M.directGetExStyle()
+    exStyle = bit.bnot(bit.bor(bit.bnot(exStyle), s))
+    M.directSetExStyle(exStyle)
+end
+
 M.setTransparent = function(enabled)
     local exStyle = M.directGetExStyle()
     if (bit.band(exStyle, 0x20) == 0) ~= enabled then -- WS_EX_TRANSPARENT 0x20L
