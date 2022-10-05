@@ -5,6 +5,7 @@ local C = require("cdef")
 local M = {}
 
 local handleType = ffi.typeof("uint32_t")
+local ptype = ffi.typeof("void*")
 
 -- Check is something fullscreen
 M.isFullscreen = (function()
@@ -96,6 +97,11 @@ end
 
 M.setTransparency = function(v)
     C.SetLayeredWindowAttributes(raylib.GetWindowHandle(), 0, v, 2)
+end
+
+M.setTopmost = function()
+    C.SetWindowPos(raylib.GetWindowHandle(), ffi.cast(ptype, -1), 0, 0, 0, 0, 3)
+    C.SetWindowPos(raylib.GetWindowHandle(), ffi.cast(ptype, 0), 0, 0, 0, 0, 3)
 end
 
 return M

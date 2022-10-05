@@ -39,6 +39,7 @@ ffi.cdef [[
     uint32_t ShowWindow(uint32_t hWnd, uint32_t nCmdShow);
     uint32_t SystemParametersInfoA(uint32_t  uiAction,uint32_t uiParam, void* pvParam,uint32_t fWinIni);
     uint32_t SetLayeredWindowAttributes(void* hwnd, uint32_t crKey, char bAlpha, uint32_t dwFlags);
+    uint32_t SetWindowPos(void* hWnd, void* hWndInsertAfter, int  X, int  Y, int  cx, int  cy, uint32_t uFlags);
 
     int strcmp(const char *str1, const char *str2);
     int printf(const char *fmt, ...);
