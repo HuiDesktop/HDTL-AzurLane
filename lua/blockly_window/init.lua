@@ -122,6 +122,8 @@ M.run = function()
             end
         end
 
+        if (not hidden) and M.param.topmost then win32.setTopmost() end
+
         ev.trigger(M.after_draw)
     end
 
