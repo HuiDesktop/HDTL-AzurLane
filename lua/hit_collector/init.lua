@@ -1,4 +1,5 @@
 local ev = require("eventize")
+local rl = require("raylib").lib
 local window = require("blockly_window")
 local win32 = require("win32")
 
@@ -12,7 +13,8 @@ end)
 ev.on(window.after_draw, function()
     if storedHit ~= hit then
         storedHit = hit
-        win32.setTransparent(storedHit)
+        if storedHit then rl.ClearWindowState(rl.FLAG_WINDOW_MOUSE_PASSTHROUGH)
+        else rl.SetWindowState(rl.FLAG_WINDOW_MOUSE_PASSTHROUGH) end
     end
 end)
 
