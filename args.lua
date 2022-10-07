@@ -16,7 +16,7 @@ end
 
 args['model'] = args['model'] and args['model'] .. '/app/' or './'
 args['audio'] = args['audio'] and args['audio'] .. '/app/' or './'
-args['config'] = args['confog'] or '.'
+args['config'] = args['config'] or '.'
 
 return {
     ipc = ipc,
